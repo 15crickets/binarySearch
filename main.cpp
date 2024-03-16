@@ -1,8 +1,8 @@
 #include <iostream>
 #include <cstring>
 #include "Node.h"
-
-
+#include <vector>
+#include <fstream>
 using namespace std;
 
 void add(Node* &root, Node* current, Node* newNode);
@@ -14,7 +14,7 @@ int main(){
     Node* root = NULL;
 
     bool stillRunning = true;
-    while(stillRunning = true){
+    while(stillRunning == true){
         cout << "What would you like to do? ADD, REMOVE, SEARCH, PRINT, or QUIT " << endl;
         char choice[50];
         cin.get(choice, 50);
@@ -45,21 +45,42 @@ int main(){
             
             }
             else if(method == 'f'){
-                
+                vector<int> nums;
+                fstream first_stream;
+                first_stream.open("nums.txt");
+                int num;
+                while(first_stream >> num){
+                    nums.push_back(num);
+                }
+                vector <int> ::iterator iter = nums.begin();
+                for(iter = nums.begin(); iter < nums.end(); iter++){
+                    Node* newNode = new Node();
+                    newNode->setInformation(*iter);
+                    add(root, root, newNode);
+                }
+
+
             }
         }
         else if(strcmp(choice, "REMOVE") == 0){
-
+            int value;
+            cout << "What number would you like to remove? " << endl;
+            cin >> value;
+            cin.get();
+            remove(root, root, value);
         }
         else if(strcmp(choice, "SEARCH") == 0){
-
-
+            int value;
+            cout << "What number would you like to search for? " << endl;
+            cin >> value;
+            cin.get();
+            search(root, value);
         }
         else if(strcmp(choice, "PRINT") == 0){
-
+            print(root, 0);
         }
         else if(strcmp(choice, "QUIT") == 0){
-
+            stillRunning = false;
         }
 
     }
@@ -106,7 +127,7 @@ void remove(Node* &root, Node* current, int value){
             }
             Node* tempNode2 = new Node();
             tempNode2->setInformation(tempNode->getInformation());
-            remove(root, tempNode, tempNode->getInformation());
+            remove(root, root, tempNode->getInformation());
             tempNode2->setLeft(root->getLeft());
             tempNode2->setRight(root->getRight());
             root = tempNode2;
@@ -184,7 +205,7 @@ void add(Node* &root, Node* current, Node* newNode){
     if(root == NULL){
         root = newNode;
     }
-    else if(current->getInformation() > newNode->getInformation()){
+    else if(current->getInformation() >= newNode->getInformation()){
         if(current->getLeft() == NULL){
             current->setLeft(newNode);
         }
