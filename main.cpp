@@ -74,7 +74,12 @@ int main(){
             cout << "What number would you like to search for? " << endl;
             cin >> value;
             cin.get();
-            search(root, value);
+            if(search(root, value) == true){
+                cout << "That value exists in the tree" << endl;
+            }
+            else{
+                cout << "That value doesn't exist in the tree" << endl;
+            }
         }
         else if(strcmp(choice, "PRINT") == 0){
             print(root, 0);
