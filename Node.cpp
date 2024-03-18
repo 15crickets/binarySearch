@@ -7,6 +7,8 @@ using namespace std;
 //constructor
 Node:: Node(){
   next = NULL;
+  right = NULL;
+  left = NULL;
 }
 
 //destructor

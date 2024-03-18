@@ -1,3 +1,10 @@
+/*
+ Author: Vikram Vasudevan
+ Date: 3/18/2024
+ Description: This program takes data inputs and sorts them into a binary search tree. The user is able to add to the tree, remove from the tree, search in the tree, and print out the tree.
+
+ */
+
 #include <iostream>
 #include <cstring>
 #include "Node.h"
@@ -5,16 +12,21 @@
 #include <fstream>
 using namespace std;
 
+//function prototypes
 void add(Node* &root, Node* current, Node* newNode);
 void print(Node* current, int count);
 bool search(Node* current, int value);
 void remove(Node* &root, Node* current, int value);
 
+//main
 int main(){
+  //initializing variables
     Node* root = NULL;
 
     bool stillRunning = true;
+    //while loop where body of code runs.
     while(stillRunning == true){
+      //prompting user for input
         cout << "What would you like to do? ADD, REMOVE, SEARCH, PRINT, or QUIT " << endl;
         char choice[50];
         cin.get(choice, 50);
@@ -25,18 +37,17 @@ int main(){
             cout << "Would you like to enter by file (f) or by console (c)? " << endl;
             cin >> method;
             cin.get();
+	    //entering data by console
             if(method == 'c'){
                 cout << "How many numbers will you be entering? " << endl;
                 int numNums;
                 cin >> numNums;
                 cin.get();
                 cout << "Enter your string of numbers: " << endl;
+		//storing data in nodes and adding it to the list.
                 for(int i = 0; i < numNums; i++){
                     int tempInt;
-                    cout << "INSIDE?" << endl;
                     cin >> tempInt;
-                    cout << tempInt << endl;
-                    cout << "HI" << endl;
                     cin.get();
                     Node* newNode = new Node();
                     newNode->setInformation(tempInt);
@@ -44,25 +55,28 @@ int main(){
                 }  
             
             }
+	  //entering data by file
             else if(method == 'f'){
                 vector<int> nums;
                 fstream first_stream;
                 first_stream.open("nums.txt");
                 int num;
+		//placing numbers in vector.
                 while(first_stream >> num){
                     nums.push_back(num);
                 }
                 vector <int> ::iterator iter = nums.begin();
-                for(iter = nums.begin(); iter < nums.end(); iter++){
+		//storing numbers in nodes and adding them to tree.
+		for(iter = nums.begin(); iter < nums.end(); iter++){
                     Node* newNode = new Node();
                     newNode->setInformation(*iter);
                     add(root, root, newNode);
                 }
-
-
             }
         }
+      
         else if(strcmp(choice, "REMOVE") == 0){
+	  //prompting for which value to remove, and calling the remove function.
             int value;
             cout << "What number would you like to remove? " << endl;
             cin >> value;
@@ -70,6 +84,7 @@ int main(){
             remove(root, root, value);
         }
         else if(strcmp(choice, "SEARCH") == 0){
+	  //prompting for which value to search for.
             int value;
             cout << "What number would you like to search for? " << endl;
             cin >> value;
@@ -82,16 +97,18 @@ int main(){
             }
         }
         else if(strcmp(choice, "PRINT") == 0){
+	  //calling print
             print(root, 0);
         }
         else if(strcmp(choice, "QUIT") == 0){
+	  //exiting the while loop.
             stillRunning = false;
         }
 
     }
-    
 }
 
+//search function, which moves through the tree until it either finds or doesn't find the value.
 bool search(Node* current, int value){
     if(value > current->getInformation()){
         if(current->getRight() != NULL){
@@ -110,7 +127,6 @@ bool search(Node* current, int value){
 }
 
 void remove(Node* &root, Node* current, int value){
-    cout << "VALUE: " << value << endl;
     if(root->getInformation() == value){
         if(root->getRight() == NULL && root->getLeft() == NULL){
             delete root;
@@ -206,10 +222,13 @@ void remove(Node* &root, Node* current, int value){
     }
 }
 
+//add function, which adds values to the tree.
 void add(Node* &root, Node* current, Node* newNode){
+  //setting the root
     if(root == NULL){
         root = newNode;
     }
+    //if the current node 
     else if(current->getInformation() >= newNode->getInformation()){
         if(current->getLeft() == NULL){
             current->setLeft(newNode);
