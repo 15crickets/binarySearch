@@ -110,7 +110,11 @@ int main(){
 
 //search function, which moves through the tree until it either finds or doesn't find the value.
 bool search(Node* current, int value){
-    if(value > current->getInformation()){
+  if(current == NULL){
+    return false;
+
+  }
+  if(value > current->getInformation()){
         if(current->getRight() != NULL){
             return search(current->getRight(), value);
         }
