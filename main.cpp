@@ -125,35 +125,45 @@ bool search(Node* current, int value){
     }
     return false;
 }
-
+//delete function
 void remove(Node* &root, Node* current, int value){
+  //dealing with if the root is getting deleted.
     if(root->getInformation() == value){
+      //if the root has no children, just delete it.
         if(root->getRight() == NULL && root->getLeft() == NULL){
             delete root;
         }
+	//if it only has one child, delete the root and move that child up to become the root.
         else if(root->getRight() != NULL && root->getLeft() == NULL){
             Node* tempNode = root->getRight();
             delete root;
             root = tempNode;
         }
+	
         else if(root->getRight() == NULL && root->getLeft() != NULL){
             Node* tempNode = root->getLeft();
             delete root;
             root = tempNode;
         }
+	//if both children exist.
         else if(root->getRight() != NULL && root->getLeft() != NULL){
+	  //move over to one of the children, then move in the opposite direction as far as you can.
             Node* tempNode = root->getRight();
             while(tempNode->getLeft() != NULL){
                 tempNode = tempNode->getLeft();
             }
+	    //the node you end up will move up into the deleted node's position.
             Node* tempNode2 = new Node();
             tempNode2->setInformation(tempNode->getInformation());
-            remove(root, root, tempNode->getInformation());
+	    //remove that node from its initial position.
+	    remove(root, root, tempNode->getInformation());
+	    //set the left and right of the new node.
             tempNode2->setLeft(root->getLeft());
             tempNode2->setRight(root->getRight());
             root = tempNode2;
         }
     }
+    //this is essentially the same as the root function. If the current is > value, move to the left. Check to see if current->getLeft()->getInformation() is correct. If not, recurse. If it is, run the same function as with the root.
     else if(current->getInformation() > value){
         if(current->getLeft()->getInformation() != value){
             remove(root, current->getLeft(), value);
@@ -187,6 +197,7 @@ void remove(Node* &root, Node* current, int value){
             }
         }
     }
+    //this chunk of the code is also the same, just moving right instead of left.
     else if(current->getInformation() < value){
         if(current->getRight()->getInformation() != value){
             remove(root, current->getRight(), value);
@@ -228,7 +239,7 @@ void add(Node* &root, Node* current, Node* newNode){
     if(root == NULL){
         root = newNode;
     }
-    //if the current node 
+    //if the current node is greater than the new node, the new node goes to the left of the current node.
     else if(current->getInformation() >= newNode->getInformation()){
         if(current->getLeft() == NULL){
             current->setLeft(newNode);
@@ -237,6 +248,7 @@ void add(Node* &root, Node* current, Node* newNode){
             add(root, current->getLeft(), newNode);
         }
     }
+    //if the current node is less than the new node, the new node goes to the right of the current node.
     else if(current->getInformation() < newNode->getInformation()){
         if(current->getRight() == NULL){
             current->setRight(newNode);
@@ -247,17 +259,25 @@ void add(Node* &root, Node* current, Node* newNode){
     }
 
 }
-
+//print function
 void print(Node* current, int count){
-    if(current->getLeft() != NULL){
-        print(current->getLeft(), count + 1);
+  if(current == NULL){
+    cout << "NOTHING IN THE TREE" << endl;
+    return;
+  }
+  //iterates to extreme left of tree.
+  else if(current->getRight() != NULL){
+      print(current->getRight(), count + 1);
     }
-    for(int i = 0; i < count; i++){
+    //prints out appropriate number of tabs
+  for(int i = 0; i < count; i++){
         cout << '\t';
     }
+    //prints
     cout << current->getInformation() << endl;
-    if(current->getRight() != NULL){
-        print(current->getRight(), count + 1);
+    //runs on the right side
+  if(current->getLeft() != NULL){
+        print(current->getLeft(), count + 1);
     }
 
 }
